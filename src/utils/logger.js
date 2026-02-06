@@ -1,3 +1,7 @@
+/**
+ * Centralized logging utility using Winston.
+ */
+
 const winston = require('winston');
 
 const logger = winston.createLogger({

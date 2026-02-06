@@ -1,3 +1,7 @@
+/**
+ * Global error-handling middleware.
+ */
+
 const logger = require('./logger');
 
 const errorHandler = (err, req, res, next) => {

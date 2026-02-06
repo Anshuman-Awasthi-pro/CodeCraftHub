@@ -1,21 +1,42 @@
+/**
+ * Handles incoming requests related to users.
+ * Contains logic for registration and login.
+ */
+
 const User = require('../models/userModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+/**
+ * Registers a new user.
+ * Hashes the password before saving to the database.
+ */
 exports.registerUser = async (req, res) => {
   const { username, email, password } = req.body;
+
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ username, email, password: hashedPassword });
+
+    const newUser = new User({
+      username,
+      email,
+      password: hashedPassword
+    });
+
     await newUser.save();
     res.status(201).json({ message: 'User registered successfully.' });
+
   } catch (error) {
     res.status(500).json({ error: 'Registration failed.' });
   }
 };
 
+/**
+ * Authenticates a user and returns a JWT token.
+ */
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
+
   try {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ error: 'User not found.' });
@@ -25,11 +46,12 @@ exports.loginUser = async (req, res) => {
 
     const token = jwt.sign(
       { id: user._id },
-      process.env.JWT_SECRET || 'secret',
+      process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
 
     res.status(200).json({ token });
+
   } catch (error) {
     res.status(500).json({ error: 'Login failed.' });
   }

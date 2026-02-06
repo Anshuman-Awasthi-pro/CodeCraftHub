@@ -1,3 +1,8 @@
+/**
+ * Defines the User schema and model.
+ * Stores authentication and role-based information.
+ */
+
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
